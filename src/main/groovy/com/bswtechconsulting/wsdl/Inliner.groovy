@@ -1,3 +1,5 @@
+package com.bswtechconsulting.wsdl
+
 import org.apache.cxf.tools.java2ws.JavaToWS
 import org.apache.cxf.tools.wsdlto.WSDLToJava
 
@@ -5,7 +7,8 @@ import org.apache.cxf.tools.wsdlto.WSDLToJava
  * Created by brady on 2/17/17.
  */
 class Inliner {
-    static void main(String[] args) {
+    // will return the name of the service and port since CXF might rename them from the original WSDL
+    static WsdlData inline(String inputWsdl) {
         'rm -rf tmp'.execute().waitFor()
         'rm -rf stuff.wsdl'.execute().waitFor()
         // TODO: Clean out the tmp directory
