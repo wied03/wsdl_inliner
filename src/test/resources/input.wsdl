@@ -47,8 +47,8 @@
         </wsdl:operation>
     </wsdl:binding>
 
-    <wsdl:service name="SOAPTestService">
-        <wsdl:port binding="tns:SOAPTestBinding" name="SOAPTestService">
+    <wsdl:service name="WeirdServiceName">
+        <wsdl:port binding="tns:SOAPTestBinding" name="WeirdPortName">
             <soap:address location="http://www.example.org/"/>
         </wsdl:port>
     </wsdl:service>
