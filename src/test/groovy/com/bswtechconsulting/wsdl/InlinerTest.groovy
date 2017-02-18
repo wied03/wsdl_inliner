@@ -26,8 +26,8 @@ class InlinerTest {
         assertThat outputFile.text,
                    is(equalTo(expected))
         assertThat result.portName,
-                   is(equalTo('newPort'))
+                   is(equalTo('SOAPTestPort'))
         assertThat result.serviceName,
-                   is(equalTo('newService'))
+                   is(equalTo('SOAPTestService'))
     }
 }

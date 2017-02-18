@@ -9,9 +9,6 @@ import javax.jws.WebService
 import javax.tools.DiagnosticCollector
 import javax.tools.ToolProvider
 
-/**
- * Created by brady on 2/17/17.
- */
 class Inliner {
     // will return the name of the service and port since CXF might rename them from the original WSDL
     static WsdlData inline(File inputWsdl, File outputWsdl) {
@@ -26,10 +23,6 @@ class Inliner {
             def klasses = getServiceClasses absoluteFile
             assert klasses.size() == 1
             def klass = klasses[0]
-            def webServiceAnnotation = klass.annotations.find { a ->
-                a.annotationType() == WebService
-            }
-            // TODO: Get port/service/etc. values from annotation
             // inlines schema by default
             outputWsdl.parentFile.mkdirs()
             JavaToWS.main('-wsdl',
@@ -38,6 +31,11 @@ class Inliner {
                           '-o',
                           outputWsdl.absolutePath,
                           klass.name)
+            WebService annotation = klass.getAnnotation(WebService)
+            def name = annotation.name()
+            // this is the convention that JavaToWS will use
+            new WsdlData(serviceName: "${name}Service",
+                         portName: "${name}Port")
         }
     }
 
