@@ -1,1 +1,70 @@
-foobar
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="SOAPTestService" targetNamespace="http://www.quintiles.com/services/soapTesting/v1" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.quintiles.com/services/soapTesting/v1" xmlns:ns1="http://www.quintiles.com/schemas/SOAPTest/v1" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <wsdl:types>
+<xs:schema xmlns:tns="http://www.quintiles.com/schemas/SOAPTest/v1" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://www.quintiles.com/schemas/SOAPTest/v1" version="1.0">
+
+  <xs:element name="SOAPTestFault" type="tns:FaultType"/>
+
+  <xs:element name="SOAPTestRequest" type="tns:SOAPTestRequestType"/>
+
+  <xs:element name="SOAPTestResponse" type="xs:string"/>
+
+  <xs:complexType name="SOAPTestRequestType">
+    <xs:sequence>
+      <xs:element name="title" type="xs:string"/>
+      <xs:element name="approvalDate" type="xs:date"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="FaultType">
+    <xs:sequence>
+      <xs:element name="source" type="xs:string"/>
+      <xs:element name="description" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="operation1Response">
+    <wsdl:part name="parameters" element="ns1:SOAPTestResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="operation1">
+    <wsdl:part name="parameters" element="ns1:SOAPTestRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="SOAPTestFault">
+    <wsdl:part name="SOAPTestFault" element="ns1:SOAPTestFault">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="SOAPTest">
+    <wsdl:operation name="operation1">
+      <wsdl:input name="operation1" message="tns:operation1">
+    </wsdl:input>
+      <wsdl:output name="operation1Response" message="tns:operation1Response">
+    </wsdl:output>
+      <wsdl:fault name="SOAPTestFault" message="tns:SOAPTestFault">
+    </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="SOAPTestServiceSoapBinding" type="tns:SOAPTest">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="operation1">
+      <soap:operation soapAction="http://www.quintiles.com/services/SOAPTest/v1/SOAPTest" style="document"/>
+      <wsdl:input name="operation1">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="operation1Response">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="SOAPTestFault">
+        <soap:fault name="SOAPTestFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="SOAPTestService">
+    <wsdl:port name="SOAPTestPort" binding="tns:SOAPTestServiceSoapBinding">
+      <soap:address location="http://localhost:9090/SOAPTestPort"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
