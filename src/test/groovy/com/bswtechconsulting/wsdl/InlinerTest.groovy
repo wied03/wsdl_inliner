@@ -10,6 +10,10 @@ class InlinerTest {
     @Test
     void testInline() {
         // arrange
+        def tmpDir = new File('build/tmp')
+        if (tmpDir.exists()) {
+            tmpDir.deleteDir()
+        }
 
         // act
         def result = Inliner.inline new File('src/test/resources/input.wsdl'),

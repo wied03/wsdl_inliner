@@ -2,7 +2,10 @@ package com.bswtechconsulting.wsdl
 
 import org.apache.cxf.tools.java2ws.JavaToWS
 import org.apache.cxf.tools.wsdlto.WSDLToJava
+import org.reflections.Reflections
+import org.reflections.util.ConfigurationBuilder
 
+import javax.jws.WebService
 import javax.tools.DiagnosticCollector
 import javax.tools.ToolProvider
 
@@ -20,7 +23,13 @@ class Inliner {
             def filenames = new FileNameFinder().getFileNames(absolutePath, '**/*.java')
             // javatows needs compiled code to re-generate the WSDL
             compileCode filenames
-            // TODO: Have to find out what the interface is automatically (reflections??)
+            def klasses = getServiceClasses absoluteFile
+            assert klasses.size() == 1
+            def klass = klasses[0]
+            def webServiceAnnotation = klass.annotations.find { a ->
+                a.annotationType() == WebService
+            }
+            // TODO: Get port/service/etc. values from annotation
             // inlines schema by default
             outputWsdl.parentFile.mkdirs()
             JavaToWS.main('-wsdl',
@@ -28,8 +37,16 @@ class Inliner {
                           absolutePath,
                           '-o',
                           outputWsdl.absolutePath,
-                          "com.quintiles.services.soaptesting.v1.SOAPTest")
+                          klass.name)
         }
+    }
+
+    private static getServiceClasses(File classPath) {
+        URLClassLoader loader = ClassLoader.systemClassLoader
+        def classpathUrl = classPath.toURL()
+        loader.addURL(classpathUrl)
+        def config = new ConfigurationBuilder().addUrls(classpathUrl)
+        new Reflections(config).getTypesAnnotatedWith(WebService)
     }
 
     private static compileCode(List<String> filenames) {
