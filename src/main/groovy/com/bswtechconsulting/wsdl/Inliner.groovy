@@ -8,20 +8,25 @@ import org.apache.cxf.tools.wsdlto.WSDLToJava
  */
 class Inliner {
     // will return the name of the service and port since CXF might rename them from the original WSDL
-    static WsdlData inline(String inputWsdl) {
-        'rm -rf tmp'.execute().waitFor()
-        'rm -rf stuff.wsdl'.execute().waitFor()
-        // TODO: Clean out the tmp directory
-        WSDLToJava.main('-d', 'tmp',
-                        "/Users/brady/code/eclipse_workspaces/mule/studio621/soaptesting/src/main/wsdl/test.wsdl")
-        def filenames = new FileNameFinder().getFileNames('tmp', '**/*.java')
-        // javatows needs compiled code to re-generate the WSDL
-        // TODO: Log this instead
-        println "compiling ${filenames.join ' '}"
-        "javac ${filenames}".execute().waitFor()
-        // TODO: Have to find out what the interface is automatically (grep files for the annotation)
-        // inlines schema by default
-        // TODO: Stuff.wsdl should go into a generated resources directory using the Maven Mojo
-        JavaToWS.main('-wsdl', '-cp', 'tmp', '-o', 'stuff.wsdl', "com.quintiles.services.soaptesting.v1.SOAPTest")
+    static WsdlData inline(File inputWsdl, File outputWsdl) {
+        File.createTempDir().with {
+            println "using tmp dir ${absolutePath}"
+            deleteOnExit()
+            WSDLToJava.main('-d',
+                            absolutePath,
+                            inputWsdl.absolutePath)
+            def filenames = new FileNameFinder().getFileNames(absolutePath, '**/*.java')
+            // javatows needs compiled code to re-generate the WSDL
+            "javac ${filenames}".execute().waitFor()
+            // TODO: Have to find out what the interface is automatically (grep files for the annotation)
+            // inlines schema by default
+            outputWsdl.parentFile.mkdirs()
+            JavaToWS.main('-wsdl',
+                          '-cp',
+                          absolutePath,
+                          '-o',
+                          outputWsdl.absolutePath,
+                          "com.quintiles.services.soaptesting.v1.SOAPTest")
+        }
     }
 }
