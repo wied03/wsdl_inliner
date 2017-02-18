@@ -3,6 +3,9 @@ package com.bswtechconsulting.wsdl
 import org.apache.cxf.tools.java2ws.JavaToWS
 import org.apache.cxf.tools.wsdlto.WSDLToJava
 
+import javax.tools.DiagnosticCollector
+import javax.tools.ToolProvider
+
 /**
  * Created by brady on 2/17/17.
  */
@@ -16,14 +19,8 @@ class Inliner {
                             inputWsdl.absolutePath)
             def filenames = new FileNameFinder().getFileNames(absolutePath, '**/*.java')
             // javatows needs compiled code to re-generate the WSDL
-            // TODO: Windows paths/javac location
-            def command = "javac ${filenames.join(' ')}"
-            def result = command.execute()
-            def exitValue = result.waitFor()
-            if (exitValue != 0) {
-                throw new Exception("Compilation error ${result.text}")
-            }
-            // TODO: Have to find out what the interface is automatically (grep files for the annotation)
+            compileCode filenames
+            // TODO: Have to find out what the interface is automatically (reflections??)
             // inlines schema by default
             outputWsdl.parentFile.mkdirs()
             JavaToWS.main('-wsdl',
@@ -32,6 +29,20 @@ class Inliner {
                           '-o',
                           outputWsdl.absolutePath,
                           "com.quintiles.services.soaptesting.v1.SOAPTest")
+        }
+    }
+
+    private static compileCode(List<String> filenames) {
+        def diagnostics = new DiagnosticCollector()
+        def compiler = ToolProvider.systemJavaCompiler
+        def manager = compiler.getStandardFileManager(diagnostics, null, null)
+        def sources = manager.getJavaFileObjectsFromStrings(filenames)
+        def compileTask = compiler.getTask(null, manager, diagnostics, null, null, sources)
+        if (!compileTask.call()) {
+            def messages = diagnostics.diagnostics.collect { d ->
+                "${d.getMessage(null)} ${d.lineNumber} ${d.source.name}"
+            }
+            throw new Exception("Unable to compile CXF generated code! ${messages}")
         }
     }
 }
