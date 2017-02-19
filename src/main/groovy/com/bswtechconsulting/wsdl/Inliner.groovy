@@ -11,7 +11,7 @@ import javax.tools.ToolProvider
 
 class Inliner {
     // will return the name of the service and port since CXF might rename them from the original WSDL
-    static WsdlData inline(File inputWsdl, File outputWsdl) {
+    WsdlData inline(File inputWsdl, File outputWsdl) {
         File.createTempDir().with {
             deleteOnExit()
             WSDLToJava.main('-d',
