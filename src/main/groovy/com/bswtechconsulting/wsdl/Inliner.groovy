@@ -12,30 +12,35 @@ import javax.tools.ToolProvider
 class Inliner {
     // will return the name of the service and port since CXF might rename them from the original WSDL
     WsdlData inline(File inputWsdl, File outputWsdl) {
-        File.createTempDir().with {
-            deleteOnExit()
-            WSDLToJava.main('-d',
-                            absolutePath,
-                            inputWsdl.absolutePath)
-            def filenames = new FileNameFinder().getFileNames(absolutePath, '**/*.java')
-            // javatows needs compiled code to re-generate the WSDL
-            compileCode filenames
-            def klasses = getServiceClasses absoluteFile
-            assert klasses.size() == 1
-            def klass = klasses[0]
-            // inlines schema by default
-            outputWsdl.parentFile.mkdirs()
-            JavaToWS.main('-wsdl',
-                          '-cp',
-                          absolutePath,
-                          '-o',
-                          outputWsdl.absolutePath,
-                          klass.name)
-            WebService annotation = klass.getAnnotation(WebService)
-            def name = annotation.name()
-            // this is the convention that JavaToWS will use
-            new WsdlData(serviceName: "${name}Service",
-                         portName: "${name}Port")
+        File tempDir = File.createTempDir()
+        try {
+            tempDir.with {
+                WSDLToJava.main('-d',
+                                absolutePath,
+                                inputWsdl.absolutePath)
+                def filenames = new FileNameFinder().getFileNames(absolutePath, '**/*.java')
+                // javatows needs compiled code to re-generate the WSDL
+                compileCode filenames
+                def klasses = getServiceClasses absoluteFile
+                assert klasses.size() == 1
+                def klass = klasses[0]
+                // inlines schema by default
+                outputWsdl.parentFile.mkdirs()
+                JavaToWS.main('-wsdl',
+                              '-cp',
+                              absolutePath,
+                              '-o',
+                              outputWsdl.absolutePath,
+                              klass.name)
+                WebService annotation = klass.getAnnotation(WebService)
+                def name = annotation.name()
+                // this is the convention that JavaToWS will use
+                new WsdlData(serviceName: "${name}Service",
+                             portName: "${name}Port")
+            }
+        }
+        finally {
+            tempDir.deleteDir()
         }
     }
 

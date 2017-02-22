@@ -16,8 +16,8 @@ class InlinerTest {
         }
 
         // act
-        def result = Inliner.inline new File('src/test/resources/input.wsdl'),
-                                    new File('build/tmp/output.wsdl')
+        def result = new Inliner().inline new File('src/test/resources/input.wsdl'),
+                                          new File('build/tmp/output.wsdl')
 
         // assert
         def expected = new File('src/test/resources/expectedOutput.wsdl').text
