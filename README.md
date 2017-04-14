@@ -6,6 +6,8 @@ Inlines WSDLs (meaning schemas, etc.) by using CXF to go from WSDL to Java and t
 
 # Building/installing
 
+**Requires JDK 1.8**
+
 This will install a Maven artifact into your local repository (have not uploaded this to Maven central yet).
 
 ```
