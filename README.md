@@ -25,7 +25,7 @@ def wsdlData = inliner.inline(new File('input.wsdl'), new File('output.wsdl'))
 ```
 
 # License
-Copyright (c) 2016, BSW Technology Consulting LLC
+Copyright (c) 2017, BSW Technology Consulting LLC
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
