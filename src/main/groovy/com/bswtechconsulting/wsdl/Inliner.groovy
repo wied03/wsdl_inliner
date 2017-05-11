@@ -11,7 +11,7 @@ import javax.tools.ToolProvider
 
 class Inliner {
     // will return the name of the service and port since CXF might rename them from the original WSDL
-    WsdlData inline(File inputWsdl, File outputWsdl) {
+    static WsdlData inline(File inputWsdl, File outputWsdl) {
         File tempDir = File.createTempDir()
         try {
             tempDir.with {
@@ -44,9 +44,10 @@ class Inliner {
         }
     }
 
-    private static getServiceClasses(File classPath) {
-        URLClassLoader loader = ClassLoader.systemClassLoader
-        def classpathUrl = classPath.toURL()
+    private static Set<Class> getServiceClasses(File classPath) {
+        URLClassLoader loader = ClassLoader.systemClassLoader as URLClassLoader
+        def classpathUrl = classPath.toURI().toURL()
+        // TODO: Find a way to get reflections to take in a new classloader so we don't have to use a protected method
         loader.addURL(classpathUrl)
         def config = new ConfigurationBuilder().addUrls(classpathUrl)
         new Reflections(config).getTypesAnnotatedWith(WebService)
