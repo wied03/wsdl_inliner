@@ -9,7 +9,7 @@
     <wsdl:types>
         <xsd:schema>
             <xsd:import namespace="http://www.foobar.com/schemas/SOAPBigEnumTest/v1"
-                        schemaLocation="BigEnum_v1.xsd"/>
+                        schemaLocation="schema.xsd"/>
         </xsd:schema>
     </wsdl:types>
 
