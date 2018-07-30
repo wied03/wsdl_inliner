@@ -44,7 +44,7 @@ class InlinerTest {
         // arrange
 
         // act
-        def result = new Inliner().inline new File('src/test/resources/input_bigenum.wsdl'),
+        def result = new Inliner().inline new File('src/test/resources/bigenum/input_bigenum.wsdl'),
                                           new File('build/tmp/output.wsdl')
 
         // assert
