@@ -24,11 +24,11 @@ class InlinerTest {
         // arrange
 
         // act
-        def result = new Inliner().inline new File('src/test/resources/input.wsdl'),
+        def result = new Inliner().inline new File('src/test/resources/standard/input.wsdl'),
                                           new File('build/tmp/output.wsdl')
 
         // assert
-        def expected = new File('src/test/resources/expectedOutput.wsdl').text
+        def expected = new File('src/test/resources/standard/expectedOutput.wsdl').text
         def outputFile = new File('build/tmp/output.wsdl')
         assert outputFile.exists()
         assertThat outputFile.text,
