@@ -15,7 +15,9 @@ class Inliner {
         File tempDir = File.createTempDir()
         try {
             tempDir.with {
-                WSDLToJava.main('-d',
+                WSDLToJava.main('-b',
+                                'classpath:/jaxb.bindings',
+                                '-d',
                                 absolutePath,
                                 inputWsdl.absolutePath)
                 def filenames = new FileNameFinder().getFileNames(absolutePath, '**/*.java')
