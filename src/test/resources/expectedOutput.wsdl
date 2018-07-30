@@ -25,16 +25,16 @@
 
 </xs:schema>
   </wsdl:types>
-  <wsdl:message name="operation1Response">
-    <wsdl:part name="parameters" element="ns1:SOAPTestResponse">
+  <wsdl:message name="SOAPTestFault">
+    <wsdl:part name="SOAPTestFault" element="ns1:SOAPTestFault">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="operation1">
     <wsdl:part name="parameters" element="ns1:SOAPTestRequest">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="SOAPTestFault">
-    <wsdl:part name="SOAPTestFault" element="ns1:SOAPTestFault">
+  <wsdl:message name="operation1Response">
+    <wsdl:part name="parameters" element="ns1:SOAPTestResponse">
     </wsdl:part>
   </wsdl:message>
   <wsdl:portType name="SOAPTest">
