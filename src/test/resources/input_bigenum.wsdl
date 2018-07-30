@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Whenever you update this file, update SOAPTest_cxf_v1.wsdl AS WELL! -->
 <wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
-                  xmlns:tns="http://www.quintiles.com/services/soapTesting/v1"
+                  xmlns:tns="http://www.foobar.com/services/soapTesting/v1"
                   xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
                   xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="SOAPTest_v1"
-                  xmlns:pp="http://www.quintiles.com/schemas/SOAPTest/v1"
-                  targetNamespace="http://www.quintiles.com/services/soapTesting/v1">
+                  xmlns:pp="http://www.foobar.com/schemas/SOAPTest/v1"
+                  targetNamespace="http://www.foobar.com/services/soapTesting/v1">
     <wsdl:types>
         <xsd:schema>
-            <xsd:import namespace="http://www.quintiles.com/schemas/SOAPTest/v1"
+            <xsd:import namespace="http://www.foobar.com/schemas/SOAPTest/v1"
                         schemaLocation="BigEnum_v1.xsd"/>
         </xsd:schema>
     </wsdl:types>
@@ -36,7 +36,7 @@
                       transport="http://schemas.xmlsoap.org/soap/http"/>
         <wsdl:operation name="operation1">
             <soap:operation
-                    soapAction="http://www.quintiles.com/services/SOAPTest/v1/SOAPTest"/>
+                    soapAction="http://www.foobar.com/services/SOAPTest/v1/SOAPTest"/>
             <wsdl:input>
                 <soap:body use="literal"/>
             </wsdl:input>

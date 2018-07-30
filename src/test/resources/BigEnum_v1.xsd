@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.quintiles.com/schemas/SOAPTest/v1"
-        xmlns:tns="http://www.quintiles.com/schemas/SOAPTest/v1"
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.foobar.com/schemas/SOAPTest/v1"
+        xmlns:tns="http://www.foobar.com/schemas/SOAPTest/v1"
         elementFormDefault="qualified">
 
     <element name="SOAPTestRequest" type="tns:SOAPTestRequestType"/>
