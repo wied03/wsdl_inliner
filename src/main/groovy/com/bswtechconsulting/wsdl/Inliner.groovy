@@ -1,5 +1,7 @@
 package com.bswtechconsulting.wsdl
 
+import org.apache.cxf.tools.common.CommandInterfaceUtils
+import org.apache.cxf.tools.common.ToolContext
 import org.apache.cxf.tools.java2ws.JavaToWS
 import org.apache.cxf.tools.wsdlto.WSDLToJava
 import org.reflections.Reflections
@@ -15,11 +17,8 @@ class Inliner {
         File tempDir = File.createTempDir()
         try {
             tempDir.with {
-                WSDLToJava.main('-b',
-                                'classpath:/jaxb.bindings',
-                                '-d',
-                                absolutePath,
-                                inputWsdl.absolutePath)
+                convertWsdlToJava(inputWsdl,
+                                  absolutePath)
                 def filenames = new FileNameFinder().getFileNames(absolutePath, '**/*.java')
                 // javatows needs compiled code to re-generate the WSDL
                 compileCode filenames
@@ -43,6 +42,23 @@ class Inliner {
         }
         finally {
             tempDir.deleteDir()
+        }
+    }
+
+    private static convertWsdlToJava(File inputWsdl,
+                                     String absolutePath) {
+        CommandInterfaceUtils.commandCommonMain()
+        def w2j = new WSDLToJava('-b',
+                                 'classpath:/jaxb.bindings',
+                                 '-d',
+                                 absolutePath,
+                                 inputWsdl.absolutePath)
+        try {
+            w2j.run(new ToolContext())
+        }
+        catch (e) {
+            throw new Exception('Unable to convert WSDL to Java, which is the first step in inlining the WSDL. Check wsdl2java error messages',
+                                e)
         }
     }
 
