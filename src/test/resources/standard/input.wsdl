@@ -9,7 +9,7 @@
     <wsdl:types>
         <xsd:schema>
             <xsd:import namespace="http://www.foobar.com/schemas/SOAPTest/v1"
-                        schemaLocation="SOAPTest_v1.xsd"/>
+                        schemaLocation="schema.xsd"/>
         </xsd:schema>
     </wsdl:types>
 
